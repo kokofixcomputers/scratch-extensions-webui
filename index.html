@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BetterDiscord Plugin Collection</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">BetterDiscord Plugin Collection</div>
+      <p class="logosmall">by kokofixcomputers</p>
+      <nav>
+        <!-- Navigation links can go here -->
+        <a id="signinwithgithub" href="https://kokoapi.glitch.me/get_access_token">Sign In with github</a>
+      </nav>
+    </div>
+    <br />
+
+    <div class="search-container">
+      <input type="text" id="search-bar" placeholder="🔎 Search plugins..." /> <a class="media2click"><img class="media2" title="Refresh" src="https://cdn.glitch.global/55794fc9-ea41-40cd-9757-2187a07e3c38/refresh-page-option.png?v=1711584104931"></a>
+      <br><a href="https://kokoapi.glitch.me/bd/form" id="addplugin" class="button download">Request Add Plugin</a>
+    </div>
+    <div class="tag-buttons-container"></div>
+
+    <body>
+      <!-- Modal -->
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="close" id="closeyeah">&times;</span>
+            <h2>Error</h2>
+          </div>
+          <div class="modal-body">
+            <p>
+              An error occurred while processing your request. Please try again
+              later. Failed to fetch.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-button">OK</button>
+          </div>
+        </div>
+      </div>
+      <div id="plugin-info" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="closeyeah" id="close">&times;</span>
+            <img class="media" id="mediayeah" src="https://betterdiscord.app/resources/ui/content_thumbnail.svg">
+            <h2 id="titleyeah">Error</h2>
+          </div>
+          <div class="modal-body">
+            <p id="authoryeah">
+              
+            </p>
+            <p id="tagsyeah">
+              
+            </p>
+            <br>
+            <p id="infoyeah">
+              An error occurred while processing your request. Please try again
+              later. Failed to load.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-button2">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" id="plugin-container">
+        <!-- Plugin cards will be inserted here by JavaScript -->
+      </div>
+      <script>
+// Function to update the text of an <a> element if 'login' key exists in the JSON
+function updateGitHubUserName(data) {
+    if (data.login) {
+        document.getElementById('signinwithgithub').innerText = "Signed in as: " + data.login;
+        document.getElementById('signinwithgithub').href = "#";
+      //addplugin
+        var loggedin = "True"
+        console.log(loggedin)
+    }
+}
+      // Function to check URL parameters for email and GitHub_token
+function checkURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailParam = urlParams.get('email');
+    const GitHubTokenParam = urlParams.get('Github_token');
+
+    if (emailParam) {
+        // Store email in cookie
+        document.cookie = "email=" + emailParam;
+        // Remove email parameter from URL
+        urlParams.delete('email');
+    }
+
+    if (GitHubTokenParam) {
+        // Store GitHub_token in cookie
+        document.cookie = "GitHub_token=" + GitHubTokenParam;
+        // Remove GitHub_token parameter from URL
+        urlParams.delete('Github_token');
+    }
+
+    // Update the URL without the email and GitHub_token parameters
+    const newURL = window.location.origin + window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+    window.history.replaceState({}, document.title, newURL);
+}
+
+// Call the function to check URL parameters, store in cookies, and remove parameters
+checkURLParams();
+
+// Check if the 'email' cookie exists
+function checkEmailCookie() {
+    var emailCookie = document.cookie.replace(/(?:(?:^|.*;\s*)email\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if (emailCookie) {
+        console.log('Email cookie exists: ' + emailCookie);
+        return true;
+    } else {
+        console.log('Email cookie does not exist');
+        return false;
+    }
+}
+// Function to send a request to GitHub using the GitHub token
+function sendGitHubRequest(token) {
+    // Make a request to GitHub API using the token
+    fetch('https://api.github.com/user/emails', {
+        headers: {
+            'Authorization': 'token ' + token
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('GitHub API response:', data);
+        // Update the <a> element if 'login' key exists in the JSON
+        updateGitHubUserName(data);
+        console.log(loggedin)
+    })
+    .catch(error => {
+        console.error('Error fetching data from GitHub API:', error);
+    });
+}
+
+// Function to check URL parameters for email and GitHub_token
+function checkURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailParam = urlParams.get('email');
+    const GitHubTokenParam = urlParams.get('GitHub_token');
+
+    if (emailParam) {
+        // Store email in cookie
+        document.cookie = "email=" + emailParam;
+        // Remove email parameter from URL
+        urlParams.delete('email');
+    }
+
+    if (GitHubTokenParam) {
+        // Store GitHub_token in cookie
+        document.cookie = "GitHub_token=" + GitHubTokenParam;
+        // Remove GitHub_token parameter from URL
+        urlParams.delete('GitHub_token');
+        // Send request to GitHub using the token
+        sendGitHubRequest(GitHubTokenParam);
+    }
+
+    // Update the URL without the email and GitHub_token parameters
+    const newURL = window.location.origin + window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+    window.history.replaceState({}, document.title, newURL);
+}
+
+// Function to check if the 'GitHub_token' cookie exists
+function checkGitHubTokenCookie() {
+    var GitHubTokenCookie = document.cookie.replace(/(?:(?:^|.*;\s*)GitHub_token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if (GitHubTokenCookie) {
+        console.log('GitHub_token cookie exists: ' + GitHubTokenCookie);
+        // Send request to GitHub using the token
+        sendGitHubRequest(GitHubTokenCookie);
+        return true;
+    } else {
+        console.log('GitHub_token cookie does not exist');
+        return false;
+    }
+}
+
+// Check for URL parameters, store in cookies, and remove parameters
+checkURLParams();
+
+// Check for the existence of cookies and send request to GitHub when the page loads
+
+
+// Check for the existence of cookies when the page loads
+window.onload = function() {
+    checkEmailCookie();
+    checkGitHubTokenCookie();
+};
+      </script>
+
+      <script>
+        // Function to create a plugin card HTML element
+        // Function to create a plugin card HTML element
+        function createPluginCard(
+          name,
+          description,
+          author,
+          tags,
+          downloadUrl,
+          github,
+          version_input,
+          dcord,
+          media
+        ) {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const header = document.createElement("div");
+          header.className = "card-header";
+          header.innerHTML = `
+        <h2>${name}</h2>
+        <p class="author">Author: ${author}</p>`; // Added author information below the plugin name
+
+          const version = document.createElement("div");
+          version.className = "card-version";
+          version.innerHTML = `
+        <p class="card-version">Version: ${version_input}</p>`; // Added version information below the plugin name
+
+          const body = document.createElement("div");
+          body.className = "card-body";
+          body.innerHTML = `<p>${description}</p>`;
+
+          const tagList = document.createElement("ul");
+          tagList.className = "tags";
+          tags.split(",").forEach((tag) => {
+            const tagItem = document.createElement("li");
+            tagItem.textContent = tag.trim();
+            tagList.appendChild(tagItem);
+          });
+
+          body.appendChild(tagList);
+
+          const downloadButton = document.createElement("a");
+          downloadButton.href = downloadUrl;
+          downloadButton.className = "button download";
+          downloadButton.textContent = "Download";
+          downloadButton.target = "_blank";
+          ("");
+          downloadButton.setAttribute("download", "");
+          body.appendChild(downloadButton);
+
+          const githubButton = document.createElement("a");
+          githubButton.href = github;
+          githubButton.className = "button installed";
+          githubButton.textContent = "Github";
+          githubButton.target = "_blank";
+          ("");
+          body.appendChild(githubButton);
+
+          const supportserver = document.createElement("a");
+          supportserver.href = dcord;
+          supportserver.className = "button dblue";
+          supportserver.textContent = "Discord Support Server";
+          supportserver.target = "_blank";
+          ("");
+          if (dcord && dcord.trim() !== '') {
+            body.appendChild(supportserver);
+          }
+          
+          const infoButton = document.createElement("a");
+          infoButton.href = "#";
+          infoButton.className = "button info";
+          infoButton.textContent = "View Details";
+          //infoButton.target = "_blank";
+          ("");
+          body.appendChild(infoButton);
+
+          card.appendChild(header);
+          card.appendChild(version);
+          card.appendChild(body);
+                  // Add an event listener to the download button
+        infoButton.addEventListener("click", function() {
+        // Get the modal element
+        var modal = document.getElementById("plugin-info");
+        if (!modal) {
+          console.error("Modal element not found"); // Debugging line
+          return;
+        }
+        // Update h2 and p elements with plugin title and description
+        document.getElementById("titleyeah").textContent = name;
+        document.getElementById("infoyeah").textContent = description;
+        document.getElementById("tagsyeah").textContent = tags;
+        document.getElementById("authoryeah").textContent = "Author: " + author;
+        console.log(media)
+        if (media) {
+          document.getElementById("mediayeah").src = media;
+        }
+        else {
+          //https://betterdiscord.app/resources/ui/content_thumbnail.svg
+          document.getElementById("mediayeah").src = "https://betterdiscord.app/resources/ui/content_thumbnail.svg";
+        }
+
+        // Open the modal
+        modal.style.display = "block";
+
+        // When the user clicks on the <span> (x) or the "OK" button, close the modal
+        var span = document.getElementById("close");
+        var ok = document.querySelector(".modal-button2");
+        span.onclick = function() {
+          modal.style.display = "none";
+        };
+        ok.onclick = function() {
+          modal.style.display = "none";
+        };
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        };
+      });
+
+          return card;
+            
+        }
+
+        // Function to capitalize the first letter of each word in a string
+        function capitalizeWords(str) {
+          return str.replace(/\b\w/g, (char) => char.toUpperCase());
+        }
+
+        // Function to create tag buttons based on unique tags from plugins
+        function createTagButtons(tags) {
+          const tagButtonsContainer = document.querySelector(
+            ".tag-buttons-container"
+          );
+          tagButtonsContainer.innerHTML = ""; // Clear existing tag buttons
+
+          tags.forEach((tag) => {
+            const button = document.createElement("button");
+            button.className = "tag-button";
+            button.setAttribute("data-tag", tag.toLowerCase()); // Store tag in lowercase for consistent filtering
+            button.textContent = capitalizeWords(tag); // Capitalize the tag for display
+            button.addEventListener("click", handleTagFilter);
+            tagButtonsContainer.appendChild(button);
+          });
+        }
+        function networkCheck() {
+          fetch("https://betterdiscord-plugins.glitch.me/checkmynetwork")
+           .then((response) => {
+            
+          })
+        }
+
+        // Function to fetch and display plugins from a text file
+        function fetchPlugins() {
+          networkCheck()
+          var modalshowen = "False";
+          const container = document.getElementById("plugin-container");
+          const thingy = document.getElementsByClassName("tag-buttons-container")[0];
+          const textBox = document.getElementById('search-bar');
+          //search-bar
+          container.innerHTML = "<p>Loading...</p>"; // Clear the container before appending new cards
+          thingy.innerHTML = ""
+          textBox.value = '';
+          fetch("plugins.txt")
+            .then((response) => {
+              if (!response.ok) {
+              console.log(modalshowen)
+                console.log("HTTP error, showing modal"); // Debugging line
+                var modalshowen = "True";
+
+                // Get the modal
+                var modal = document.getElementById("myModal");
+                if (!modal) {
+                  console.error("Modal element not found"); // Debugging line
+                  return;
+                }
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementById("closeyeah");
+                var ok = document.querySelector(".modal-button");
+
+                // Open the modal
+                modal.style.display = "block";
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                  modal.style.display = "none";
+                };
+                ok.onclick = function () {
+                  modal.style.display = "none";
+                };
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                  if (event.target === modal) {
+                    modal.style.display = "none";
+                  }
+                };
+              
+
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.text();
+            })
+            .catch((error) => {
+            console.log(modalshowen)
+              console.log("HTTP error, showing modal"); // Debugging line
+              var modalshowen = "True";
+
+              // Get the modal
+              var modal = document.getElementById("myModal");
+              if (!modal) {
+                console.error("Modal element not found"); // Debugging line
+                return;
+              }
+
+              // Get the <span> element that closes the modal
+              var span = document.getElementById("closeyeah");
+              var ok = document.querySelector(".modal-button");
+
+              // Open the modal
+              modal.style.display = "block";
+
+              // When the user clicks on <span> (x), close the modal
+              span.onclick = function () {
+                modal.style.display = "none";
+              };
+              ok.onclick = function () {
+                  modal.style.display = "none";
+              };
+
+              // When the user clicks anywhere outside of the modal, close it
+              window.onclick = function (event) {
+                if (event.target === modal) {
+                  modal.style.display = "none";
+                }
+              };
+            
+
+              console.error("Fetch error:", error); // Debugging line
+            })
+            .then((text) => {
+            
+              const plugins = text.trim().split("\n\n");
+              const container = document.getElementById("plugin-container");
+              container.innerHTML = ""; // Clear the container before appending new cards
+
+              // Set to hold unique tags
+              const uniqueTags = new Set();
+
+              plugins.forEach((pluginData) => {
+                const parts = pluginData.split("\n");
+                if (parts.length >= 4) {
+                  const name = parts[0];
+                  const author = parts[1];
+                  const description = parts[2];
+                  const tags = parts[3]
+                    .split(",")
+                    .filter((tag) => !tag.includes("http")); // Exclude tags with URLs
+                  const downloadUrl = parts[4];
+                  const github = parts[5];
+                  const version = parts[6];
+                  const discordsupport = parts[7];
+                  const media = parts[8];
+                  const card = createPluginCard(
+                    name,
+                    description,
+                    author,
+                    tags.join(","),
+                    downloadUrl,
+                    github,
+                    version,
+                    discordsupport,
+                    media
+                  ); // Join tags back to a comma-separated string
+                  container.appendChild(card);
+
+                  // Add tags to the set
+                  tags.forEach((tag) => {
+                    uniqueTags.add(tag.trim().toLowerCase());
+                  });
+                }
+              });
+
+              // Create tag buttons from unique tags
+              createTagButtons(Array.from(uniqueTags).sort());
+            })
+            .catch((error) => {
+              console.error("Error fetching plugins:", error);
+            });
+        }
+        // Function to handle search and filter the plugin cards
+        function handleSearch() {
+          const searchTerm = document
+            .getElementById("search-bar")
+            .value.toLowerCase();
+          const cards = document.querySelectorAll(".card");
+          cards.forEach((card) => {
+            const title = card
+              .querySelector(".card-header h2")
+              .textContent.toLowerCase();
+            const description = card
+              .querySelector(".card-body p")
+              .textContent.toLowerCase();
+            if (
+              title.includes(searchTerm) ||
+              description.includes(searchTerm)
+            ) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        }
+        // Function to handle tag filtering
+        function handleTagFilter(event) {
+          const button = event.target;
+          const selectedTag = button
+            .getAttribute("data-tag")
+            .toLowerCase()
+            .trim(); // Normalize the selected tag
+          const isSelected = button.classList.contains("selected");
+
+          // Toggle the 'selected' class on the button
+          if (isSelected) {
+            button.classList.remove("selected");
+          } else {
+            // Deselect all other tags before selecting the new one
+            document
+              .querySelectorAll(".tag-button")
+              .forEach((btn) => btn.classList.remove("selected"));
+            button.classList.add("selected");
+          }
+
+          const cards = document.querySelectorAll(".card");
+          cards.forEach((card) => {
+            const tags = Array.from(card.querySelectorAll(".tags li")).map(
+              (tagElement) => tagElement.textContent.toLowerCase().trim() // Normalize the tags from the card
+            );
+            if (isSelected) {
+              card.style.display = ""; // Show all cards if the tag is deselected
+            } else {
+              if (tags.includes(selectedTag)) {
+                card.style.display = ""; // Show the card if it includes the selected tag
+              } else {
+                card.style.display = "none"; // Hide the card if it doesn't include the selected tag
+              }
+            }
+          });
+        }
+        function setup(){
+          var modalshowen = "False";
+        }
+
+        // Event listeners for the tag buttons
+        document.querySelectorAll(".tag-button").forEach((button) => {
+          button.addEventListener("click", handleTagFilter);
+        });
+        document.querySelectorAll(".media2click").forEach((container) => {
+          container.addEventListener("click", fetchPlugins);
+        });
+
+        // Event listener for the search bar
+        document
+          .getElementById("search-bar")
+          .addEventListener("input", handleSearch);
+
+        // Call fetchPlugins when the page loads
+        document.addEventListener("DOMContentLoaded", setup);
+        document.addEventListener("DOMContentLoaded", fetchPlugins);
+        // Execute a function every 1 minute
+        setInterval(function() {
+        // Get the div element
+        var div = document.getElementById("plugin-container");
+
+         
+
+        //fetchPlugins()
+        }, 120000);
+
+      
+      </script>
+      <center><p>
+        <a class="button download">It looks like you came to the end!</a>
+        </p></center>
+    </body>
+  </body>
+</html>
+<center>
+  <footer>
+    <p>
+      This list and this website has been made by kokofixcomputers. Find info on
+      contact and about him here:
+      <a href="https://kokofixcomputers.stio.studio/"
+        >https://kokofixcomputers.stio.studio/</a
+      >
+      <br />
+      You can request your addon to be added/removed by contacting him using one
+      of the options on his website
+    </p>
+  </footer>
+</center>
