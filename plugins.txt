@@ -1,1 +1,4 @@
-
+spellCheck
+Check spelling
+./files/spellCheck.js
+Unknown
