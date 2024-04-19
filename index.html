@@ -433,15 +433,9 @@ window.onload = function() {
                 const parts = pluginData.split("\n");
                 if (parts.length >= 4) {
                   const name = parts[0];
-                  const author = parts[1];
                   const description = parts[2];
-                  const tags = parts[3]
-                    .split(",")
-                    .filter((tag) => !tag.includes("http")); // Exclude tags with URLs
                   const downloadUrl = parts[4];
-                  const github = parts[5];
                   const version = parts[6];
-                  const discordsupport = parts[7];
                   const media = parts[8];
                   const card = createPluginCard(
                     name,
