@@ -247,23 +247,6 @@ window.onload = function() {
           ("");
           downloadButton.setAttribute("download", "");
           body.appendChild(downloadButton);
-
-          const githubButton = document.createElement("a");
-          githubButton.href = github;
-          githubButton.className = "button installed";
-          githubButton.textContent = "Github";
-          githubButton.target = "_blank";
-          ("");
-          body.appendChild(githubButton);
-
-          const supportserver = document.createElement("a");
-          supportserver.href = dcord;
-          supportserver.className = "button dblue";
-          supportserver.textContent = "Discord Support Server";
-          supportserver.target = "_blank";
-          ("");
-          if (dcord && dcord.trim() !== '') {
-            body.appendChild(supportserver);
           }
           
           const infoButton = document.createElement("a");
