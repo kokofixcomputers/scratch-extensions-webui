@@ -18,7 +18,7 @@
     <br />
 
     <div class="search-container">
-      <input type="text" id="search-bar" placeholder="🔎 Search plugins..." /> <a class="media2click"><img class="media2" title="Refresh" src="https://cdn.glitch.global/55794fc9-ea41-40cd-9757-2187a07e3c38/refresh-page-option.png?v=1711584104931"></a>
+      <input type="text" id="search-bar" placeholder="🔎 Search Extensions..." /> <a class="media2click"><img class="media2" title="Refresh" src="https://cdn.glitch.global/55794fc9-ea41-40cd-9757-2187a07e3c38/refresh-page-option.png?v=1711584104931"></a>
       <br><a href="https://kokoapi.glitch.me/bd/form" id="addplugin" class="button download">Request Add Plugin</a>
     </div>
     <div class="tag-buttons-container"></div>
@@ -203,12 +203,8 @@ window.onload = function() {
         function createPluginCard(
           name,
           description,
-          author,
-          tags,
           downloadUrl,
-          github,
           version_input,
-          dcord,
           media
         ) {
           const card = document.createElement("div");
