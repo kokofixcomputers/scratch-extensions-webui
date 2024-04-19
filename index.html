@@ -433,10 +433,10 @@ window.onload = function() {
                 const parts = pluginData.split("\n");
                 if (parts.length >= 4) {
                   const name = parts[0];
-                  const description = parts[2];
-                  const downloadUrl = parts[4];
-                  const version = parts[6];
-                  const media = parts[8];
+                  const description = parts[1];
+                  const downloadUrl = parts[2];
+                  const version = parts[3];
+                  const media = parts[4];
                   const card = createPluginCard(
                     name,
                     description,
